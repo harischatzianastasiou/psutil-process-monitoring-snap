@@ -128,23 +128,25 @@ if __name__ == "__main__":
     descending = args.descending
     n = int(args.n)
     live_update = args.live_update
-    # print the processes for the first time
-    processes = get_processes_info()
-    df = construct_dataframe(processes)
-    if n == 0:
-        print(df.to_string())
-    elif n > 0:
-        print(df.head(n).to_string())
-    # print continuously
-    while live_update:
+    df_collection = {}
+    counter =0
+    for i in range(0,5):
         # get all process info
         processes = get_processes_info()
-        df = construct_dataframe(processes)
+        df_collection[i] = construct_dataframe(processes)
+        counter+=1
+        time.sleep(1)
         # clear the screen depending on your OS
+        df=df_collection[i]
         os.system("cls") if "nt" in os.name else os.system("clear")
         if n == 0:
-            print(df.to_string())
+             print(df.to_string())
         elif n > 0:
-            print(df.head(n).to_string())
-        time.sleep(0.7)
-    log()
+             print(df.head(n).to_string())
+        df.to_csv('monitor.csv',mode='a')
+    if(i==4):
+        while(True):
+             for x in range(0,4):
+                 df_collection[x] = df_collection[x+1]
+             processes = get_processes_info()
+             df_collection[i] = construct_dataframe(processes)
