@@ -1,9 +1,11 @@
 import psutil
+from collections import OrderedDict
 from datetime import datetime
 import pandas as pd
 import time
 import os
 from collections import Counter
+from time import sleep
 
 def get_size(bytes, suffix='B'):
     for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
@@ -34,12 +36,7 @@ def get_processes_info():
            except OSError:
                 # system processes, using boot time instead
                create_time = datetime.fromtimestamp(psutil.boot_time())
-#           try:
-#                # get the number of CPU cores that can execute this process
-#               cores = len(process.cpu_affinity())
-#           except psutil.AccessDenied:
-#               cores = 0
-            # get the CPU usage percentage
+            
            cpu_usage = process.cpu_percent()
            total_cpu_usage += cpu_usage
             # get the Memory  usage percentage
@@ -71,30 +68,29 @@ def get_processes_info():
            try:
                exe = process.exe()
            except psutil.AccessDenied:
-               exe = "Access to full path denied"
-           # try:
-           #     uids = process.uids()
-           # except psutil.Access.Denied:
-           #     uids= "N/A"
+           uptime=time.time() - process.create_time()
+           uptime=time.strftime('%H:%M:%S', time.gmtime(uptime))
+           p=psutil.Process(pid)
+           cpu_times=p.cpu_times()
+           cwd=p.cwd()
        processes.append({
-            'pid': pid, 'name': name, 'create_time': create_time,
+            'pid': pid, 'name': name, 'create_time':create_time,
             'cpu_usage': cpu_usage, 'status': status, 'nice': nice,
             'memory_usage': memory_usage, 'read_bytes': read_bytes, 'write_bytes': write_bytes,
-            'n_threads': n_threads, 'username': username,'exe': exe
+            'n_threads': n_threads, 'username': username,'exe': exe,'uptime':uptime,'cpu_times':cpu_times,'cwd':cwd
        })
        pids.append(pid)
 
     return(processes,pids,total_cpu_usage,total_memory_usage)
-
 def construct_dataframe(processes):
     # convert to pandas dataframe
     df = pd.DataFrame(processes)
     # set the process id as index of a process
     df.set_index('pid', inplace=True)
     # sort rows by the column passed as argument
-    df.sort_values(sort_by, inplace=True, ascending=descending)
+    df.sort_values(sort_by, inplace=True)
     # pretty printing bytes
-    df['memory_usage'] = df['memory_usage'].apply(get_size)
+    df['memory_usage'] = df['memory_usage']
     df['write_bytes'] = df['write_bytes'].apply(get_size)
     df['read_bytes'] = df['read_bytes'].apply(get_size)
     # convert to proper date format
@@ -102,113 +98,124 @@ def construct_dataframe(processes):
         datetime.strftime, args=("%Y-%m-%d %H:%M:%S",))
     # reorder and define used columns
     df = df[columns.split(",")]
-    return df
+    s=df
+    return df,s
 
 def execute(counter):
-    if(counter>=10):
-         counter=9
+    if(counter>=60):
+         counter=59
          for x in range(0,counter):
              df_collection[x] = df_collection[x+1]
              pid_collection[x] = pid_collection[x+1]
     # get all process info
     processes,pids,total_cpu_usage,total_memory_usage = get_processes_info()
-    df_collection[counter] = construct_dataframe(processes)
+    df_collection[counter],s= construct_dataframe(processes)
     pid_collection[counter]=pids
     df=df_collection[counter].iloc[:10]
-    return(df,processes,pids,total_cpu_usage,total_memory_usage)
-
+    s=df_collection[counter]
+    return(df,processes,pids,total_cpu_usage,total_memory_usage,s)
 def score(counter):
-        if(counter<10):
+           i=0
+           if(counter>=60):
+              counter=59
+           for k,v in found10_10.items():
+              if k not in pid_collection[counter]:
+                  #move to notfound10_10 and
+                  notfound10_10[k]=59
+
+           #1)if pid not in pid_collection & pid in notfound10_10
+           #  decrease value of pid in notfound10_10 until value=0
+           for k,v in notfound10_10.items():
+              if k not in pid_collection[counter]:
+                  if(notfound10_10[k]>0):
+                       notfound10_10[k]-=1
+                  if(notfound10_10[k]==0):
+                       deleted[i]=k
+                       i+=1
+                  if k in found10_10:
+                       notfound10_10[k]=59
+                       del found10_10[k]
+           #if pid value=0 delete from notfound10_10
+           for x in range(0,len(deleted)):
+              pid=deleted[x]
+              if pid in notfound10_10:
+                       del notfound10_10[pid]
            for y in range(0,len(pid_collection[counter])):
               pid=pid_collection[counter][y]
+              #if pid found for the 1st time
               if pid not in found:
                   found[pid]=1
                   notfound10_10[pid]=1
+              #if pid found in previous seconds
               else:
                   found[pid]=found[pid]+1
-                  if(notfound10_10[pid]<10):
-                           notfound10_10[pid]=notfound10_10[pid]+1
-                  if(notfound10_10[pid]==10):
-                           found10_10[pid]=10
-                           del notfound10_10[pid]
-        #if(counter==10):
-        #   for k,v in found.items():
-        #      if(v==10):
-        #          found10_10[k]=v
-        #      else:
-        #          notfound10_10[k]=v
-        if(counter>=10):
-           counter=9
-           for y in range(0,len(pid_collection[counter])):
-              pid=pid_collection[counter][y]
-              if pid in found:
+                  #and is stored in notfound10_10
                   if pid in notfound10_10:
-                      if(notfound10_10[pid]<10):
-                           notfound10_10[pid]=notfound10_10[pid]+1
-                      if(notfound10_10[pid]==10):
-                           found10_10[pid]=10
-                           del notfound10_10[pid]
-                  #if pid in found10_10:
-                      #
-              if pid not in found:
-                      found[pid]=1
-                      notfound10_10[pid]=1
-              for k,v in found10_10.items():
-                  if k not in pid_collection[counter]:
-                      notfound10_10[k]=9
-              if pid in found10_10:
-                  if pid in notfound10_10:
-                      if(notfound10_10[pid]==9):
-                           del found10_10[pid]
-              for k,v in notfound10_10.items():
-                  if k not in pid_collection[counter]:
-                      notfound10_10[k]=notfound10_10[k]-1
-
-if __name__ == "__main__":
+                       #increase pid value until value=10
+                       if(notfound10_10[pid]<60):
+                            notfound10_10[pid]=notfound10_10[pid]+1
+                       #if pid value=10 delete and move to found10_10
+                       if(notfound10_10[pid]==60):
+                            found10_10[pid]=60
+                            del notfound10_10[pid]
+    
+    if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="Process Viewer & Monitor")
     parser.add_argument("-c", "--columns", help="""Columns to show,
-                                                available are name,create_time,cores,cpu_usage$
-                                                Default is name,cpu_usage,memory_usage,read_by$
-                        default="name,username,cpu_usage,memory_usage,create_time,exe,status,n$
+                                                available are name,create_time,cores,cpu_usage,status,nice,memory_usage,read_bytes,write_bytes,n_threads,username.
+                                                Default is name,cpu_usage,memory_usage,read_bytes,write_bytes,status,create_time,nice,n_threads,cores.""",
+                        default="name,username,uptime,cpu_usage,memory_usage,exe,status,cpu_times,cwd")
     parser.add_argument("-s", "--sort-by", dest="sort_by",
-                        help="Column to sort by, default is memory_usage .", default="memory_u$
+                        help="Column to sort by, default is memory_usage .", default="uptime")
     parser.add_argument("--descending", action="store_true",
                         help="Whether to sort in descending order.")
     parser.add_argument(
-        "-n", help="Number of processes to show, will show all if 0 is specified, default is 2$
+        "-n", help="Number of processes to show, will show all if 0 is specified, default is 25 .", default=200)
     parser.add_argument("-u", "--live-update", action="store_true",
-                        help="Whether to keep the program on and updating process information $
-
-    # parse arguments
+                        help="Whether to keep the program on and updating process information each second")
+# parse arguments
     args = parser.parse_args()
     columns = args.columns
     sort_by = args.sort_by
     descending = args.descending
     n = int(args.n)
     live_update = args.live_update
-   counter=0
+    counter=0
     s=0
     df_collection = {}
     pid_collection = {}
-    old = {}
+    deleted = {}
     found = {}
     found10_10 = {}
     notfound10_10 = {}
+    lessthan60_60 = {}
     new = {}
-    while(True):
-        df,processes,pids,total_cpu_usage,total_memory_usage = execute(counter)
+ while(True):
+        df,processes,pids,total_cpu_usage,total_memory_usage,s = execute(counter)
         score(counter)
-        os.system("cls") if "nt" in os.name else os.system("clear")
+        df['memory_usage']=df['memory_usage'].apply(get_size)
+        os.system("clear")
         if n == 0:
              print(df.to_string())
         elif n > 0:
              print(df.head(n).to_string())
-        print("\n Total Processes:",len(pids)," || Total CPU(%) Usage: {:.2f}".format(total_cp$
+        print("\n Total Processes:",len(pids)," || Total CPU(%) Usage: {:.2f}".format(total_cpu_usage), " || Total Memory(%) Usage: {:.2f}".format(total_memory_usage))
         print("\n    Max CPU Process Info")
         max_cpu_process = df['cpu_usage'].argmax()
         print(df.loc[max_cpu_process])
-        print(notfound10_10)
+        max_mem_process=s['memory_usage'].argmax()
+        s['memory_usage']=s['memory_usage'].apply(get_size)
+        print("\n    Max Memory Process Info")
+        print(s.loc[max_mem_process])
+        # Create a list of tuples sorted by index 1 i.e. value field
+        listofTuples = sorted(found.items() ,  key=lambda x: x[1])
+        # Iterate over the sorted sequence
+        found=OrderedDict(sorted(found.items(), key=lambda x: x[1]))
+        dict_items = found.items()
+        first10=list(dict_items)[:10]
+        print("Processes with lowest uptime since programm started",first10)
+        if(counter>=60):
+             print("\n Processes not found in every sec ,in the last 60 secs",notfound10_10)
+        sleep(1)
         counter+=1
-        time.sleep(1)
-
