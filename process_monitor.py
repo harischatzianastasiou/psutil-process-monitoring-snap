@@ -54,7 +54,13 @@ def get_processes_info():
                 # get the process priority (a lower value means a more prioritized process)
                nice = int(process.nice())
            except psutil.AccessDenied:
+               nice = 0
+           try:
+               # get the memory usage in bytes
+               memory_usage = process.memory_full_info().uss
+           except psutil.AccessDenied:
                memory_usage = 0
+
             # total process read and written bytes
            io_counters = process.io_counters()
            read_bytes = io_counters.read_bytes
