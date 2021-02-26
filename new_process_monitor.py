@@ -71,7 +71,7 @@ def get_processes_info(counter):
                username = process.username()
            except psutil.AccessDenied:
                username = "N/A"
-          try:
+           try:
                exe = process.exe()
            except psutil.AccessDenied:
                exe = "Access to full path denied"
