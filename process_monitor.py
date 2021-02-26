@@ -21,9 +21,10 @@ def get_processes_info():
     total_cpu_usage = 0
     total_memory_usage = 0
     for process in psutil.process_iter():
+      if(process.pid!=os.getpid()):
         # get all process info in one shot
        with process.oneshot():
-            # get the process id
+           # get the process id
            pid = process.pid
            if pid == 0:
                 # System Idle Process for Windows NT, useless to see anyways
@@ -36,7 +37,12 @@ def get_processes_info():
            except OSError:
                 # system processes, using boot time instead
                create_time = datetime.fromtimestamp(psutil.boot_time())
-            
+#           try:
+#                # get the number of CPU cores that can execute this process
+#               cores = len(process.cpu_affinity())
+#           except psutil.AccessDenied:
+#               cores = 0
+            # get the CPU usage percentage
            cpu_usage = process.cpu_percent()
            total_cpu_usage += cpu_usage
             # get the Memory  usage percentage
@@ -47,11 +53,6 @@ def get_processes_info():
            try:
                 # get the process priority (a lower value means a more prioritized process)
                nice = int(process.nice())
-           except psutil.AccessDenied:
-               nice = 0
-           try:
-                # get the memory usage in bytes
-               memory_usage = process.memory_full_info().uss
            except psutil.AccessDenied:
                memory_usage = 0
             # total process read and written bytes
@@ -68,6 +69,7 @@ def get_processes_info():
            try:
                exe = process.exe()
            except psutil.AccessDenied:
+               exe = "Access to full path denied"
            uptime=time.time() - process.create_time()
            uptime=time.strftime('%H:%M:%S', time.gmtime(uptime))
            p=psutil.Process(pid)
@@ -82,6 +84,7 @@ def get_processes_info():
        pids.append(pid)
 
     return(processes,pids,total_cpu_usage,total_memory_usage)
+
 def construct_dataframe(processes):
     # convert to pandas dataframe
     df = pd.DataFrame(processes)
@@ -100,7 +103,6 @@ def construct_dataframe(processes):
     df = df[columns.split(",")]
     s=df
     return df,s
-
 def execute(counter):
     if(counter>=60):
          counter=59
@@ -114,6 +116,7 @@ def execute(counter):
     df=df_collection[counter].iloc[:10]
     s=df_collection[counter]
     return(df,processes,pids,total_cpu_usage,total_memory_usage,s)
+
 def score(counter):
            i=0
            if(counter>=60):
@@ -140,6 +143,7 @@ def score(counter):
               pid=deleted[x]
               if pid in notfound10_10:
                        del notfound10_10[pid]
+
            for y in range(0,len(pid_collection[counter])):
               pid=pid_collection[counter][y]
               #if pid found for the 1st time
@@ -158,8 +162,7 @@ def score(counter):
                        if(notfound10_10[pid]==60):
                             found10_10[pid]=60
                             del notfound10_10[pid]
-    
-    if __name__ == "__main__":
+if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="Process Viewer & Monitor")
     parser.add_argument("-c", "--columns", help="""Columns to show,
@@ -174,7 +177,8 @@ def score(counter):
         "-n", help="Number of processes to show, will show all if 0 is specified, default is 25 .", default=200)
     parser.add_argument("-u", "--live-update", action="store_true",
                         help="Whether to keep the program on and updating process information each second")
-# parse arguments
+
+    # parse arguments
     args = parser.parse_args()
     columns = args.columns
     sort_by = args.sort_by
@@ -191,7 +195,7 @@ def score(counter):
     notfound10_10 = {}
     lessthan60_60 = {}
     new = {}
- while(True):
+   while(True):
         df,processes,pids,total_cpu_usage,total_memory_usage,s = execute(counter)
         score(counter)
         df['memory_usage']=df['memory_usage'].apply(get_size)
