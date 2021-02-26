@@ -202,7 +202,7 @@ if __name__ == "__main__":
     lessthan60_60 = {}
     new = {}
     
-    while(True):
+while(True):
         df,processes,pids,total_cpu_usage,total_memory_usage,s = execute(counter)
         score(counter)
         df['memory_usage']=df['memory_usage'].apply(get_size)
