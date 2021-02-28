@@ -178,6 +178,9 @@ if __name__ == "__main__":
         found=OrderedDict(sorted(found.items(), key=lambda x: x[1]))
         dict_items = found.items()
         first10=list(dict_items)[:10]
+         #df.sort_values(by=['found_ratio'], inplace=True)
+        #df=df.iloc[:30]
+
         print("Processes with lowest uptime since programm started",first10)
         if(counter>=60):
              print("\n Processes not found in every sec ,in the last 60 secs",notfound10_10)
