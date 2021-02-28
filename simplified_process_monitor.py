@@ -2,7 +2,6 @@ import psutil
 import pandas as pd
 import time
 import os
-from fractions import Fraction
 from datetime import datetime
 
 def get_size(bytes, suffix=''):
