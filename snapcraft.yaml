@@ -1,24 +1,17 @@
-name: flask-temp
+name: psutil-process-monitoring-snap 
 version: '1.0.0'
-summary: flaskapp
+summary: psutil-process-monitoring-snap 
 description: |
-  OfflineIMAP is software that downloads your email mailbox(es) as local
-  Maildirs. OfflineIMAP will synchronize both sides via IMAP.
+  Process monitoring snap using cross-platform lib psutil
 base: core18
 confinement: devmode
 
 apps:
-
-  flask-temp:
-    command: flask run --host=0.0.0.0
-    daemon: simple
-    restart-condition: always
-    plugs: [network-bind]
-    environment:
-      FLASK_APP: flask-temp.py
+  psutil-process-monitoring-snap:
+     command: bin/psutil-process-monitoring-snap
 parts:
-  flask-temp:
+  psutil-process-monitoring-snap:
     plugin: python
     python-version: python3
     source: .
-    python-packages : [flask]
+    python-packages : [psutil,pandas]
