@@ -14,4 +14,7 @@ parts:
     plugin: python
     python-version: python3
     source: .
-    python-packages : [psutil,pandas]
+    python-packages :
+       - pandas==1.2.0
+       - psutil==5.8.0
+
