@@ -8,11 +8,10 @@ setup(
         author='tchatzian',
         author_email='harischatzi@tutanota.com',
         url='https://github.com/tchatzian/psutil-process-monitoring-snap',
-        packages=['psutil-process-monitoring-snap'],
+        packages=find_packages(),
         include_package_data=True,
         zip_safe=False,
         install_requires=[
             'psutil',
             'pandas',
-        ],
-        )
+        ]
