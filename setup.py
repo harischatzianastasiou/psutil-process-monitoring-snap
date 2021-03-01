@@ -2,17 +2,17 @@ from setuptools import find_packages
 from setuptools import setup
 
 setup(
-        name='flask-temp',
+        name='psutil-process-monitoring-snap',
         version='1.0.0',
-        description='contains some sample hello world code using Flask',
+        description='Process monitoring using cross-platform library psutil',
         author='tchatzian',
-        author_email='harischatzi1988@gmail.com',
-        url='https://github.com/tchatzian/flask-temp',
-        packages=['flask-temp'],
+        author_email='harischatzi@tutanota.com',
+        url='https://github.com/tchatzian/psutil-process-monitoring-snap',
+        packages=['psutil-process-monitoring-snap'],
         include_package_data=True,
         zip_safe=False,
         install_requires=[
-            'flask',
-            'numpy',
+            'psutil',
+            'pandas',
         ],
         )
