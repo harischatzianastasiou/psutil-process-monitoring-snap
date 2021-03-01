@@ -1,0 +1,24 @@
+name: flask-temp
+version: '1.0.0'
+summary: flaskapp
+description: |
+  OfflineIMAP is software that downloads your email mailbox(es) as local
+  Maildirs. OfflineIMAP will synchronize both sides via IMAP.
+base: core18
+confinement: devmode
+
+apps:
+
+  flask-temp:
+    command: flask run --host=0.0.0.0
+    daemon: simple
+    restart-condition: always
+    plugs: [network-bind]
+    environment:
+      FLASK_APP: flask-temp.py
+parts:
+  flask-temp:
+    plugin: python
+    python-version: python3
+    source: .
+    python-packages : [flask]
