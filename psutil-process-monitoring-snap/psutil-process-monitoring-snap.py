@@ -68,8 +68,8 @@ if __name__ == "__main__":
         #df.sort_values(by=['found_ratio'], inplace=True)
         #df=df.iloc[:30]
         os.system("clear")
-        print("\n Max CPU(%):",max_cpu," || Max Memory(%):",max_mem," || Total Processes:",len(processes)," || Total CPU(%) Usage:",total_cpu_percent," || Total Memory(%): {:.1f}".format(tot$
-        if df.empty == True:
+        print("\n Max CPU(%):",max_cpu," || Max Memory(%):",max_mem," || Total Processes:",len(processes)," || Total CPU(%) Usage:",total_cpu_percent," || Total Memory(%): {:.1f}".format(total_memory_percent))
+        if(df.empty == True):
              print("\n No process started in the last 60 seconds")
         else:
              print("\n")
