@@ -8,13 +8,9 @@ confinement: devmode
 
 apps:
   psutil-process-monitoring-snap:
-     command: bin/psutil-process-monitoring-snap
+     command: sudo python3 psutil-process-monitoring-snap.py
 parts:
-  psutil-process-monitoring-snap:
-    plugin: python
-    python-version: python3
-    source: .
-    python-packages :
-       - pandas==1.2.0
-       - psutil==5.8.0
-
+   psutil-process-monitoring-snap:
+     plugin: python
+     python-version: python3
+     source: .
