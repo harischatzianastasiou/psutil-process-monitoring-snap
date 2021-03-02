@@ -14,5 +14,6 @@ setup(
             'psutil',
             'pandas',
         ],
+        scripts=['psutil-process-monitoring-snap/psutil-process-monitoring-snap.py'],
         )
 
