@@ -8,18 +8,17 @@ confinement: devmode
 
 apps:
   psutil-process-monitoring-snap:
-     command: sudo psutil-process-monitoring-snap.py psutil-process-monitoring-snap
+     command: sudo python3 psutil-process-monitoring-snap.py
      
 parts:
   psutil-process-monitoring-snap:
      plugin: python
      python-version: python3
      source: .
-     requirements: requirements.txt
- 
-  launcher:
-    plugin: nil
-    source: .
-    override-build: |
-      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
-      cp -av psutil-process-monitoring-snap.py $SNAPCRAFT_PART_INSTALL/bin/
+     stage-packages:
+      - numpy
+      - pandas
+      - psutil
+      - python-dateutil
+      - pytz
+      - six
