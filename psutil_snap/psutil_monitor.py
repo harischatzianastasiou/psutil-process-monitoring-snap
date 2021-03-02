@@ -28,7 +28,7 @@ def get_processes_info():
            cpu_usage = p.cpu_percent()
            mem_usage=p.memory_percent()
            status = process.status()
-           cwd=p.cwd()
+           #cwd=p.cwd()
            # get the time the process was spawned
            try:
                create_time = datetime.fromtimestamp(process.create_time())
@@ -43,14 +43,14 @@ def get_processes_info():
            #uptime=time.strftime('%H:%M:%S', time.gmtime(uptime))
            if (uptime<60):
                uptime=round((uptime/60),2)
-           try:
-               username = process.username()
-           except psutil.AccessDenied:
-               username = "N/A"
-           try:
-               exe = process.exe()
-           except psutil.AccessDenied:
-               exe = "Access to full path denied"
+           #try:
+           #    username = process.username()
+           #except psutil.AccessDenied:
+           #    username = "N/A"
+           #try:
+           #    exe = process.exe()
+           #except psutil.AccessDenied:
+           #    exe = "Access to full path denied"
            processes.append({
                  'pid': pid, 'name': name,'username': username,'cwd':cwd,'exe':exe,
                  'status': status,'cpu_usage':cpu_usage,'memory_usage':mem_usage,'found_ratio':uptime
