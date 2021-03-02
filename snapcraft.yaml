@@ -17,4 +17,11 @@ parts:
      plugin: python
      python-version: python3
      source: .
-     python-packages: [psutil]
+     python-packages: requirements.txt
+ 
+  launcher:
+    plugin: nil
+    source: .
+    override-build: |
+      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
+      cp -av psutil-process-monitoring-snap.py $SNAPCRAFT_PART_INSTALL/bin/
