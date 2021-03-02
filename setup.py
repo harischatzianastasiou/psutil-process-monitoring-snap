@@ -1,5 +1,13 @@
-from setuptools import find_packages
+import os
+
 from setuptools import setup
+
+this = os.path.dirname(os.path.realpath(__file__))
+
+
+def read(name):
+    with open(os.path.join(this, name)) as f:
+        return f.read()
 
 setup(
         name='psutil-process-monitoring-snap',
@@ -15,4 +23,5 @@ setup(
             'psutil',
             'pandas',
         ],
+         scripts=['bin/psutil-process-monitoring-snap']
       )
