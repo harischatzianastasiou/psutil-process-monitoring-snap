@@ -15,7 +15,7 @@ parts:
      plugin: python
      python-version: python3
      source: .
-     python-packages: requirements.txt
+     requirements: requirements.txt
  
   launcher:
     plugin: nil
