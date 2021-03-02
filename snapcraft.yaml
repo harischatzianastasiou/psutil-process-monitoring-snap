@@ -14,6 +14,3 @@ parts:
      plugin: python
      python-version: python3
      source: .
-     python-packages : 
-          - psutil
-          - pandas
