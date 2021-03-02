@@ -14,5 +14,5 @@ setup(
         install_requires=[
             'psutil',
             'pandas',
-        ]
+        ],
 )
