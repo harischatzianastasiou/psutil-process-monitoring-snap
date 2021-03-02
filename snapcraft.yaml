@@ -8,7 +8,7 @@ confinement: devmode
 
 apps:
   psutil-process-monitoring-snap:
-     command: python3 psutil_monitor.py
+     command: psutil_monitor
 parts:
   psutil-process-monitoring-snap:
     plugin : python
