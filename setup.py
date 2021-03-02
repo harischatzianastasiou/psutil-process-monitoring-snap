@@ -14,8 +14,5 @@ setup(
         install_requires=[
              'pandas',
              'psutil',
-             'setuptools',
-             'wheel',
         ],
-        scripts=['psutil_snap/psutil_monitor.py'],
 )
