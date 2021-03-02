@@ -13,9 +13,3 @@ parts:
   psutil-process-monitoring-snap:
     plugin: python
     python-version: python3
-    python3-packages: [
-         pandas,
-         psutil,
-         setuptools,
-         wheel,
-    ]
