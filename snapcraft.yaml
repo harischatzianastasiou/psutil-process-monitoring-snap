@@ -7,10 +7,10 @@ base: core18
 confinement: devmode
 
 apps:
-  psutil_process_monitoring_snap:
+  psutil-process-monitoring-snap:
      command: bin/psutil-process-monitoring-snap
 parts:
-  psutil_process_monitoring_snap:
+  psutil-process-monitoring-snap:
     plugin: python
     python-version: python3
-    source: .
+         
