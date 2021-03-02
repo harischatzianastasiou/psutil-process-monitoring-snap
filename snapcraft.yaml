@@ -1,24 +1,16 @@
-name: psutil-process-monitoring-snap 
+name: psutil-process-monitoring-snap
 version: '1.0.0'
-summary: psutil-process-monitoring-snap 
+summary: psutil-process-monitoring-snap
 description: |
   Process monitoring snap using cross-platform lib psutil
 base: core18
 confinement: devmode
 
 apps:
-  psutil-process-monitoring-snap:
-     command: sudo python3 psutil-process-monitoring-snap.py
-     
+  psutil_process_monitoring_snap:
+     command: bin/psutil-process-monitoring-snap
 parts:
-  psutil-process-monitoring-snap:
-     plugin: python
-     python-version: python3
-     source: .
-     stage-packages:
-      - numpy
-      - pandas
-      - psutil
-      - python-dateutil
-      - pytz
-      - six
+  psutil_process_monitoring_snap:
+    plugin: python
+    python-version: python3
+    source: .
