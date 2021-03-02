@@ -11,6 +11,7 @@ apps:
      command: python3 psutil_monitor.py
 parts:
   psutil-process-monitoring-snap:
-    plugin: python
-    python-version: python3
-    python-packages: [psutil]
+    plugin : python
+    python-version : python3
+    source : .
+    python-packages : [psutil]
