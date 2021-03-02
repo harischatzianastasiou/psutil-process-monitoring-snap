@@ -8,7 +8,7 @@ confinement: devmode
 
 apps:
   psutil-process-monitoring-snap:
-     command: python3 psutil-process-monitoring-snap.py
+     command: sudo python3 psutil-process-monitoring-snap.py
  
  
 parts:
