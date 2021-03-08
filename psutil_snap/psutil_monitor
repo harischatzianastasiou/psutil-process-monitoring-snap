@@ -25,7 +25,7 @@ def get_processes_info():
                continue
            name = process.name()
            p = psutil.Process(pid)
-           cpu_usage = p.cpu_percent()
+           cpu_usage = process.cpu_percent()
            mem_usage=p.memory_percent()
            status = process.status()
            #cwd=p.cwd()
@@ -62,14 +62,14 @@ if __name__ == "__main__":
         total_memory_percent=df['memory_usage'].sum()
         total_cpu_percent=df['cpu_usage'].sum()
         max_cpu = df['cpu_usage'].max()
-        df['memory_usage']=df['memory_usage'].apply(get_size)
+        #df['memory_usage']=df['memory_usage'].apply(get_size)
         max_mem=df['memory_usage'].max()
         df = df[['pid', 'name','status','found_ratio','cpu_usage','memory_usage']]
         df = df[df['found_ratio']<1]
         #df.sort_values(by=['found_ratio'], inplace=True)
         #df=df.iloc[:30]
         os.system("clear")
-        print("\n Max CPU(%):",max_cpu," || Max Memory(%):",max_mem," || Total Processes:",len(processes)," || Total CPU(%) Usage:",total_cpu_percent," || Total Memory(%): {:.1f}".format(total_memory_percent))
+        print("\n Max CPU(%):",max_cpu," || Max Memory(%): {:.1f}".format(max_mem)," || Total Processes:",len(processes)," || Total CPU(%) Usage: {:.1f}".format(total_cpu_percent)," || Total Memory(%): {:.1f}".format(total_memory_percent))
         if(df.empty == True):
              print("\n No process started in the last 60 seconds")
         else:
