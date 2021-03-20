@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import csv
 import psutil
 import pandas as pd
 import time
@@ -15,7 +16,6 @@ def get_size(bytes, suffix=''):
 
 def get_processes_info():
     # the list the contain all process dictionaries
-    up=0
     processes = []
     for process in psutil.process_iter():
       if(process.pid!=os.getpid()):
@@ -56,23 +56,33 @@ def get_processes_info():
            })
     return(processes)
 if __name__ == "__main__":
+    counter = 0
     while(True):
+        counter+=1
         processes=get_processes_info()
         df = pd.DataFrame(processes)
-        total_memory_percent=df['memory_usage'].sum()
-        total_cpu_percent=df['cpu_usage'].sum()
+        total_memory_percent=round(df['memory_usage'].sum(),1)
+        total_cpu_percent=round(df['cpu_usage'].sum(),1)
         max_cpu = df['cpu_usage'].max()
-        #df['memory_usage']=df['memory_usage'].apply(get_size)
-        max_mem=df['memory_usage'].max()
+        max_mem=round(df['memory_usage'].max(),1)
+        df['memory_usage']=df['memory_usage'].apply(get_size)
         df = df[['pid', 'name','status','found_ratio','cpu_usage','memory_usage']]
         df = df[df['found_ratio']<1]
         #df.sort_values(by=['found_ratio'], inplace=True)
         #df=df.iloc[:30]
         os.system("clear")
-        print("\n Max CPU(%):",max_cpu," || Max Memory(%): {:.1f}".format(max_mem)," || Total Processes:",len(processes)," || Total CPU(%) Usage: {:.1f}".format(total_cpu_percent)," || Total Memory(%): {:.1f}".format(total_memory_percent))
+        print("\n Max CPU(%):",max_cpu," || Max Memory(%): ",max_mem," || Total Processes:",len(processes)," || Total CPU(%) Usage:",total_cpu_percent," || Total Memory(%): ",total_memory_percent)
         if(df.empty == True):
              print("\n No process started in the last 60 seconds")
         else:
              print("\n")
              print(df.to_string(index=False))
         time.sleep(1)
+        data=[]
+        data.append({
+             'Sec=' :counter,'  Max CPU(%) : ' : max_cpu , ' Max Memory(%) : ' : max_mem , ' Total Processes : ' : len(processes), ' Total CPU(%) : ': total_cpu_percent, ' Total Memory(%) : ' : total_memory_percent
+        })
+        with open('monitor1.csv', 'a', newline='') as file:
+                 writer = csv.writer(file, delimiter='|')
+                 writer.writerow(data)
+
