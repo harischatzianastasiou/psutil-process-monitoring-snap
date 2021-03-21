@@ -2,9 +2,10 @@ name: psutil-process-monitoring-snap
 version: '1.0.0'
 summary: psutil-process-monitoring-snap
 description: |
-  Process monitoring snap using cross-platform lib psutil
+  A simple python snap using psutil cross-platform library for retrieving information on running processes and system utilization.
+  Exports results to "monitor.csv" file on current directory.
 base: core18
-confinement: devmode
+confinement: strict
 
 apps:
   psutil-process-monitoring-snap:
