@@ -82,7 +82,7 @@ if __name__ == "__main__":
         data.append({
              'Sec=' :counter,'  Max CPU(%) : ' : max_cpu , ' Max Memory(%) : ' : max_mem , ' Total Processes : ' : len(processes), ' Total CPU(%) : ': total_cpu_percent, ' Total Memory(%) : ' : total_memory_percent
         })
-        with open('monitor1.csv', 'a', newline='') as file:
+        with open('monitor.csv', 'a', newline='') as file:
                  writer = csv.writer(file, delimiter='|')
                  writer.writerow(data)
 
