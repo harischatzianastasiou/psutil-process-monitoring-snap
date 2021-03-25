@@ -10,7 +10,7 @@ confinement: strict
 apps:
   psutil-process-monitoring-snap:
      command: psutil_monitor
-     daemon: simple
+   
 parts:
   psutil-process-monitoring-snap:
     plugin : python
