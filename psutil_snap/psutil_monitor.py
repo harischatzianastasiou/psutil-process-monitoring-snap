@@ -76,12 +76,12 @@ if __name__ == "__main__":
         #df.sort_values(by=['found_ratio'], inplace=True)
         #df=df.iloc[:30]
         os.system("clear")
-        print("\n Max CPU(%):",max_cpu," || Max Memory(%): ",max_mem," || Total Processes:",len(processes)," || Total CPU(%) Usage:",total_cpu_percent," || Total Memory(%): ",total_memory_percent," || ",current_time)
-        if(df.empty == True):
-             print("\n No process started in the last 60 seconds")
-        else:
-             print("\n")
-             print(df.to_string(index=False))
+        #print("\n Max CPU(%):",max_cpu," || Max Memory(%): ",max_mem," || Total Processes:",len(processes)," || Total CPU(%) Usage:",total_cpu_percent," || Total Memory(%): ",total_memory_percent," || ",current_time)
+        #if(df.empty == True):
+        #     print("\n No process started in the last 60 seconds")
+        #else:
+        #     print("\n")
+        #     print(df.to_string(index=False))
         time.sleep(1)
         data=[]
         data.append({
