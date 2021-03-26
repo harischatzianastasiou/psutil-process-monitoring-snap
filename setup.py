@@ -15,5 +15,5 @@ setup(
              'pandas',
              'psutil',
         ],
-        scripts=['psutil_snap/psutil_monitor'],
+        scripts=['psutil_snap/psutil_monitor.py'],
 )
