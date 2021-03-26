@@ -9,7 +9,7 @@ confinement: strict
 
 apps:
   psutil-process-monitoring-snap:
-     command: psutil_monitor
+     command: psutil_monitor.py
      daemon: simple
      restart-condition: on-failure
 parts:
