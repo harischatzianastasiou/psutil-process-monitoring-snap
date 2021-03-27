@@ -11,7 +11,7 @@ apps:
   psutil-process-monitoring-snap:
      command: psutil_monitor
      daemon: simple
-     restart-condition: never
+     restart-condition: always
 parts:
   psutil-process-monitoring-snap:
     plugin : python
