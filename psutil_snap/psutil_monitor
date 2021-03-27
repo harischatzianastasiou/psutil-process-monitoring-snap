@@ -62,32 +62,33 @@ if __name__ == "__main__":
     IST = pytz.timezone('Europe/Athens')
     datetime_ist=datetime.now(IST)
     current_time=datetime_ist.strftime('%Y:%m:%d %H:%M:%S %Z %z')
-    counter+=1
-    processes=get_processes_info()
-    df = pd.DataFrame(processes)
-    total_memory_percent=round(df['memory_usage'].sum(),1)
-    total_cpu_percent=round(df['cpu_usage'].sum(),1)
-    max_cpu = df['cpu_usage'].max()
-    max_mem=round(df['memory_usage'].max(),1)
-    df['memory_usage']=df['memory_usage'].apply(get_size)
-    df = df[['pid', 'name','status','found_ratio','cpu_usage','memory_usage']]
-    df = df[df['found_ratio']<1]
-    #df.sort_values(by=['found_ratio'], inplace=True)
-    #df=df.iloc[:30]
-    os.system("clear")
-    #print("\n Max CPU(%):",max_cpu," || Max Memory(%): ",max_mem," || Total Processes:",len(processes)," || Total CPU(%) Usage:",total_cpu_percent," || Total Memory(%): ",total_memory_percent," || ",current_time)
-    #if(df.empty == True):
-    #     print("\n No process started in the last 60 seconds")
-    #else:
-    #     print("\n")
-    #     print(df.to_string(index=False))
-    time.sleep(1)
-    data=[]
-    data.append({
-           '  Max CPU(%) : ' : max_cpu , ' Max Memory(%) : ' : max_mem , ' Total CPU(%) : ': total_cpu_percent, ' Total Memory(%) : ' : total_memory_percent, ' Total Processes : ' : len(processes), 'Sec=' :counter,' || ' : current_time
-    })
-    results = os.path.expanduser('~/monitor1.csv')
-    with open('/snap/psutil-process-monitoring-snap/monitor.csv', 'a', newline='') as csv_file:
-           writer = csv.writer(csv_file, delimiter='|')
-           writer.writerow(data)
+    while True:
+        counter+=1
+        processes=get_processes_info()
+        df = pd.DataFrame(processes)
+        total_memory_percent=round(df['memory_usage'].sum(),1)
+        total_cpu_percent=round(df['cpu_usage'].sum(),1)
+        max_cpu = df['cpu_usage'].max()
+        max_mem=round(df['memory_usage'].max(),1)
+        df['memory_usage']=df['memory_usage'].apply(get_size)
+        df = df[['pid', 'name','status','found_ratio','cpu_usage','memory_usage']]
+        df = df[df['found_ratio']<1]
+        #df.sort_values(by=['found_ratio'], inplace=True)
+        #df=df.iloc[:30]
+        os.system("clear")
+        #print("\n Max CPU(%):",max_cpu," || Max Memory(%): ",max_mem," || Total Processes:",len(processes)," || Total CPU(%) Usage:",total_cpu_percent," || Total Memory(%): ",total_memory_percent," || ",current_time)
+        #if(df.empty == True):
+        #     print("\n No process started in the last 60 seconds")
+        #else:
+        #     print("\n")
+        #     print(df.to_string(index=False))
+        time.sleep(1)
+        data=[]
+        data.append({
+             '  Max CPU(%) : ' : max_cpu , ' Max Memory(%) : ' : max_mem , ' Total CPU(%) : ': total_cpu_percent, ' Total Memory(%) : ' : total_memory_percent, ' Total Processes : ' : len(processes), 'Sec=' :counter,' || ' : current_time
+        })
+        results = os.path.expanduser('~/monitor1.csv')
+        with open('/snap/psutil-process-monitoring-snap/monitor.csv', 'a', newline='') as csv_file:
+             writer = csv.writer(csv_file, delimiter='|')
+             writer.writerow(data)
      
