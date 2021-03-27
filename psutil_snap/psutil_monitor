@@ -88,7 +88,7 @@ if __name__ == "__main__":
              '  Max CPU(%) : ' : max_cpu , ' Max Memory(%) : ' : max_mem , ' Total CPU(%) : ': total_cpu_percent, ' Total Memory(%) : ' : total_memory_percent, ' Total Processes : ' : len(processes), 'Sec=' :counter,' || ' : current_time
         })
         results = os.path.expanduser('~/monitor1.csv')
-        with open('/snap/psutil-process-monitoring-snap/monitor.csv', 'a', newline='') as csv_file:
+        with open(results, 'a', newline='') as csv_file:
              writer = csv.writer(csv_file, delimiter='|')
              writer.writerow(data)
      
