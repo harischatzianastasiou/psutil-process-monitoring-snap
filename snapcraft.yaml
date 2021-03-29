@@ -7,19 +7,9 @@ description: |
 base: core18
 confinement: strict
 
-plugs:
-  my-plug:
-     interface: personal-files
-      read:
-      - $HOME
-      write:
-      - $HOME
-
-
 apps:
   psutil-process-monitoring-snap:
      command: psutil_monitor     
-     plugs: my-plug
      
 parts:
   psutil-process-monitoring-snap:
