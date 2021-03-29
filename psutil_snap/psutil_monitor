@@ -83,12 +83,10 @@ if __name__ == "__main__":
         #     print("\n")
         #     print(df.to_string(index=False))
         time.sleep(1)
-        data=[]
-        data.append({
-             '  Max CPU(%) : ' : max_cpu , ' Max Memory(%) : ' : max_mem , ' Total CPU(%) : ': total_cpu_percent, ' Total Memory(%) : ' : total_memory_percent, ' Total Processes : ' : len(processes), 'Sec=' :counter,' || ' : current_time
-        })
-        results = os.path.expanduser('~/monitor1.csv')
-        with open(results, 'a', newline='') as csv_file:
-             writer = csv.writer(csv_file, delimiter='|')
+        data={'Sec':counter ,'max_cpu': max_cpu ,'max_mem': max_mem ,'total_processes':len(processes),'total_cpu':total_cpu_percent,'total_memory':total_memory_percent,'current_time': current_time}
+        results = os.path.expanduser('~/monitortest.csv')
+        data=data.values()
+        with open(results,'a',newline='') as csv_file:
+             writer = csv.writer(csv_file, delimiter=',')
              writer.writerow(data)
      
