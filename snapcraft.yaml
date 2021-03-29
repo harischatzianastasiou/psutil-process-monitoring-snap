@@ -10,6 +10,8 @@ confinement: strict
 apps:
   psutil-process-monitoring-snap:
      command: psutil_monitor
+     plugs: home
+     
      
 parts:
   psutil-process-monitoring-snap:
