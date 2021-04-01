@@ -19,7 +19,7 @@ def get_processes_info():
     # the list the contain all process dictionaries
     processes = []
     for process in psutil.process_iter():
-      if(process.pid!=os.getpid()):
+      if(process.pid!=os.getpid() and process.name()!='systemd-journal'):
            pid = process.pid
            if pid == 0:
                 # System Idle Process for Windows NT, useless to see anyways
