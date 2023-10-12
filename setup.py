@@ -11,9 +11,5 @@ setup(
         packages=['psutil_snap'],
         include_package_data=True,
         zip_safe=False,
-        install_requires=[
-             'pandas',
-             'psutil',
-        ],
         scripts=['psutil_snap/psutil_monitor'],
 )
