@@ -87,8 +87,8 @@ if __name__ == "__main__":
              print("\n")
              print(df.to_string(index=False))
         time.sleep(1)
-        data={'Sec':counter ,'max_cpu': max_cpu ,'max_mem': max_mem ,'total_processes':len(processes),
-            'total_cpu':total_cpu_percent,'total_memory':total_memory_percent,'current_time': current_time}
+        data={'max_cpu': max_cpu ,'max_mem': max_mem ,'total_processes':len(processes),
+            'total_cpu':total_cpu_percent,'total_memory':total_memory_percent}
         results = os.path.expanduser('~/monitortest.csv')
         data=data.values()
         with open(results,'a',newline='') as csv_file:
